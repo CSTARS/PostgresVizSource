@@ -1,0 +1,28 @@
+#! /bin/bash
+
+INCLUDE_JARS=("servlet-api" "commons-logging" "commons-lang") 
+
+rm -rf war
+rm -f vizsource.war
+
+mkdir war
+mkdir war/WEB-INF
+mkdir war/WEB-INF/classes
+cp -r bin/* war/WEB-INF/classes/
+
+cp web.xml war/WEB-INF/
+
+# LIBs
+cp -r lib war/WEB-INF/
+for jar in "${INCLUDE_JARS[@]}"
+do
+	cp "/usr/share/java/"$jar".jar" war/WEB-INF/lib/
+done
+
+cd war
+zip -r ../vizsource.war ./*
+cd ../
+
+#sudo rm -rf /var/lib/jetty/webapps/atlasvizsource*
+#sudo cp atlasvizsource.war /var/lib/jetty/webapps/
+#sudo /etc/init.d/jetty restart
