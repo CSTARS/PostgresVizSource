@@ -26,7 +26,7 @@ public class DataSource extends DataSourceServlet {
 	  public DataTable generateDataTable(Query query, HttpServletRequest request) throws DataSourceException {
 		  String view  = request.getParameter("view");
 		  if( view == null ) view = "";
-		  view = view.replaceAll("\\W", ""); // clean
+		  //view = view.replaceAll("\\W", ""); // clean
 		  
 		  try {
 				Class.forName("org.postgresql.Driver");

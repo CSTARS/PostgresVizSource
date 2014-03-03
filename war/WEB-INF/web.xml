@@ -7,7 +7,7 @@
 
   <servlet>
     <servlet-name>rest</servlet-name>
-    <servlet-class>gov.ca.atlas.server.DataSource</servlet-class>
+    <servlet-class>edu.cstars.vizsource.DataSource</servlet-class>
   </servlet>
   
   <servlet-mapping>

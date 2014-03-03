@@ -1,0 +1,53 @@
+--- SqlDataSourceHelper.java.orig	2009-10-25 02:16:42.000000000 -0700
++++ SqlDataSourceHelper.java	2009-11-17 09:58:25.000000000 -0800
+@@ -125,7 +125,9 @@
+       buildRows(table, rs);
+       return table;
+     } catch (SQLException e) {
+-      String messageToUser = "Failed to execute SQL query. mySQL error message:"
++      String messageToUser = "Failed to execute SQL query: " 
++          + queryStringBuilder.toString() +
++          " database server error message:"
+           + " " + e.getMessage();
+       throw new DataSourceException(
+           ReasonType.INTERNAL_ERROR, messageToUser);
+@@ -225,7 +227,7 @@
+     List<String> groupColumnIds = queryGroup.getColumnIds();
+     List<String> newColumnIds = Lists.newArrayList();
+     for (String groupColumnId : groupColumnIds) {
+-      newColumnIds.add('`' + groupColumnId + '`');
++      newColumnIds.add('"' + groupColumnId + '"');
+     }
+     queryStringBuilder.appendWithSeparators(newColumnIds, ", ");
+     queryStringBuilder.append(" ");
+@@ -362,8 +364,8 @@
+           || (filter.getValue().getType() == ValueType.DATE)
+           || (filter.getValue().getType() == ValueType.DATETIME)
+           || (filter.getValue().getType() == ValueType.TIMEOFDAY)) {
+-        second.insert(0, "\"");
+-        second.insert(second.length(), "\"");
++        second.insert(0, "'");
++        second.insert(second.length(), "'");
+       }
+     }
+     whereClause.append(buildWhereClauseFromRightAndLeftParts(
+@@ -491,15 +493,15 @@
+ 
+     // For simple column the id is simply the column id.
+     if (abstractColumn instanceof SimpleColumn) {
+-      columnId.append("`").append(abstractColumn.getId()).append("`");
++      columnId.append('"').append(abstractColumn.getId()).append('"');
+     } else {
+       // For aggregation column build the id from the aggregation type and the
+       // column id (e.g. for aggregation type 'min' and column id 'salary', the
+-      // sql column id will be: min(`salary`);
++      // sql column id will be: min("salary");
+       AggregationColumn aggregationColumn = (AggregationColumn) abstractColumn;
+       columnId.append(getAggregationFunction(
+-          aggregationColumn.getAggregationType())).append("(`").
+-          append(aggregationColumn.getAggregatedColumn()).append("`)");
++          aggregationColumn.getAggregationType())).append("(\"").
++          append(aggregationColumn.getAggregatedColumn()).append("\")");
+     }
+     return columnId;
+   }
