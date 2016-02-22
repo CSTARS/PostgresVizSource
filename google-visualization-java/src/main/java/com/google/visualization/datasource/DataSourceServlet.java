@@ -29,6 +29,7 @@ public abstract class DataSourceServlet extends HttpServlet implements DataTable
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	resp.setHeader("Access-Control-Allow-Origin", "*");
     DataSourceHelper.executeDataSourceServletFlow(req, resp, this, isRestrictedAccessMode());
   }
 
